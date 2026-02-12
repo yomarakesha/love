@@ -120,11 +120,16 @@ export const AppProvider = ({ children }) => {
         gestureRef.current.rawGesture = recognizedGesture;
         setGesture(recognizedGesture);
         gestureRef.current.value = targetValue;
+
+        // Always set handPresent to true if we receive a specific gesture (like from a button click)
         gestureRef.current.handPresent = true;
 
         if (handLandmarks && handLandmarks.length > 0) {
             const palm = handLandmarks[0][0];
             gestureRef.current.handPosition = { x: palm.x, y: palm.y, z: palm.z };
+        } else {
+            // If triggered by button (no landmarks), set a default "center" position
+            gestureRef.current.handPosition = { x: 0.5, y: 0.5, z: 0 };
         }
     };
 

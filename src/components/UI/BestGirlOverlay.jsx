@@ -114,13 +114,13 @@ const BestGirlOverlay = ({ onSecretTriggered }) => {
                             animation: 'shimmer 2s linear infinite',
                         }}
                     >
-                        ✨ Secret Unlocked ✨
+                        ✨ Ты самая лучшая у меня ✨
                     </h1>
                 </div>
 
                 <div className={`mt-4 transition-all duration-500 delay-500 ${stage === 'full' ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'}`}>
-                    <p className="text-white/60 text-sm sm:text-base animate-pulse font-romantic">
-                        подожди, ещё кое-что... 💕
+                    <p className="text-white/80 text-lg sm:text-xl animate-pulse font-romantic font-bold">
+                        я люблю тебя ❤️
                     </p>
                 </div>
             </div>

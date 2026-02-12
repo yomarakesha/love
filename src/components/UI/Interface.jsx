@@ -20,7 +20,7 @@ const colorPalettes = [
 ];
 
 const Interface = () => {
-    const { config, updateConfig, gesture, isMobile, takeScreenshot } = useApp();
+    const { config, updateConfig, gesture, updateGesture, isMobile, takeScreenshot } = useApp();
     const [isFullscreen, setIsFullscreen] = useState(false);
     const [isPanelOpen, setIsPanelOpen] = useState(false); // Start closed — this is a gift!
     const [activePalette, setActivePalette] = useState('love');
@@ -64,21 +64,25 @@ const Interface = () => {
 
             {/* Bottom: Controls + Hint */}
             <div className="flex flex-col items-start gap-3">
-                {/* Center Hint — the key prompt */}
-                {gesture === 'None' && (
-                    <div className="w-full flex justify-center pointer-events-none mb-2">
-                        <div className="text-center animate-fade-in">
-                            <p className="text-sm sm:text-lg font-light tracking-widest uppercase animate-pulse text-white/60">
-                                👋 Покажи руку камере
-                            </p>
-                            <p className="text-xs sm:text-sm text-pink-400/70 mt-2 animate-bounce-slow font-romantic">
-                                ✌️ Покажи два пальца для сюрприза...
-                            </p>
-                        </div>
-                    </div>
-                )}
-
                 {/* Controls Panel */}
+
+                {/* SECRET HEART TRIGGER */}
+                <div className="w-full flex justify-center mb-6 pointer-events-auto">
+                    <button
+                        onClick={() => updateGesture('Victory')}
+                        className="group relative flex items-center justify-center p-4 rounded-full bg-gradient-to-br from-pink-500/20 to-purple-600/20 border border-pink-500/30 backdrop-blur-md transition-all hover:scale-110 active:scale-95 duration-500 shadow-[0_0_30px_rgba(255,0,128,0.3)] hover:shadow-[0_0_50px_rgba(255,0,128,0.6)]"
+                    >
+                        <div className="absolute inset-0 rounded-full bg-pink-500/10 animate-ping opacity-75" />
+                        <Heart
+                            size={isMobile ? 32 : 48}
+                            fill="#ff0080"
+                            className="text-pink-500 animate-heartbeat drop-shadow-[0_0_10px_rgba(255,0,128,0.8)]"
+                        />
+                        <span className="absolute -bottom-8 text-[10px] sm:text-xs text-pink-300/50 font-romantic tracking-widest opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">
+                            нажми на меня
+                        </span>
+                    </button>
+                </div>
                 <div className="ui-panel pointer-events-auto max-w-xs sm:max-w-sm w-full transition-all duration-500">
                     <div className={`glass-panel overflow-hidden transition-all duration-500 ${isPanelOpen ? 'max-h-[500px] sm:max-h-[600px] opacity-100' : 'max-h-0 opacity-0 !border-0'}`}>
                         <div className="p-3 sm:p-4 space-y-3 max-h-[55vh] overflow-y-auto">

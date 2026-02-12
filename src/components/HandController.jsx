@@ -19,9 +19,22 @@ const HandController = () => {
 
         let active = true;
 
-        const setupModel = async () => {
+        const initialize = async () => {
+            // 1. Start Camera Immediately
             try {
-                setStatus('loading-model');
+                setStatus('initializing');
+                await startWebcam();
+                // If camera starts, we can at least show the feed
+                if (active) setStatus('loading-model');
+            } catch (e) {
+                console.error("Camera failed:", e);
+                setErrorMessage(e.message);
+                setStatus('error');
+                return; // Stop if no camera
+            }
+
+            // 2. Load AI Model in background
+            try {
                 console.log("Starting Model Load...");
 
                 const vision = await FilesetResolver.forVisionTasks(
@@ -44,17 +57,20 @@ const HandController = () => {
                 console.log("Graph loaded.");
                 if (!active) return;
 
-                setStatus('starting-camera');
-                await startWebcam();
                 setStatus('ready');
             } catch (e) {
-                console.error("Setup error:", e);
-                setErrorMessage(e.message || "Failed to load AI Model");
-                setStatus('error');
+                console.error("AI Setup error:", e);
+                // We don't fail the whole component, just the AI part
+                setErrorMessage("AI Failed - Camera Only Mode");
+                // We can keep the camera running but maybe show a warning? 
+                // For now, let's just stay in 'loading-model' state visually or add a partial error state?
+                // Or just leave it as 'ready' but with no gestures?
+                // Let's set it to ready so the overlay goes away, but maybe log it.
+                setStatus('ready');
             }
         };
 
-        setupModel();
+        initialize();
 
         return () => {
             active = false;
@@ -154,10 +170,17 @@ const HandController = () => {
                 />
 
                 {/* Overlays for States */}
-                {status !== 'ready' && status !== 'error' && (
+                {status === 'initializing' && (
                     <div className="absolute inset-0 flex flex-col items-center justify-center text-white space-y-1.5 bg-black/50">
                         <Loader2 className="animate-spin text-cyan-400" size={isMobile ? 20 : 32} />
-                        <span className="text-[8px] sm:text-xs text-center px-2 font-mono text-cyan-200/70">Initializing AI...</span>
+                        <span className="text-[8px] sm:text-xs text-center px-2 font-mono text-cyan-200/70">Starting Camera...</span>
+                    </div>
+                )}
+
+                {status === 'loading-model' && (
+                    <div className="absolute top-2 right-2 flex items-center space-x-1">
+                        <Loader2 className="animate-spin text-yellow-400" size={12} />
+                        <span className="text-[8px] text-yellow-200">AI Loading...</span>
                     </div>
                 )}
 

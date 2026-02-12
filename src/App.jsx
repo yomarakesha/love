@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { AppProvider } from './context/AppContext';
 import Scene from './components/Scene';
 import Interface from './components/UI/Interface';
-import HandController from './components/HandController';
 import BestGirlOverlay from './components/UI/BestGirlOverlay';
 import TouchController from './components/TouchController';
 import IntroScreen from './components/UI/IntroScreen';
@@ -52,7 +51,8 @@ function App() {
         {appPhase === 'interactive' && (
           <>
             <Interface />
-            <HandController />
+            {/* Camera and Gesture Controllers removed for Touch UI */}
+
             <TouchController />
             <BestGirlOverlay onSecretTriggered={handleSecretTriggered} />
           </>
